@@ -2,6 +2,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,6 +51,7 @@ class RestaurantTest {
         restaurant.addToMenu("Sizzling brownie",319);
         assertEquals(initialMenuSize+1,restaurant.getMenu().size());
     }
+
     @Test
     public void removing_item_from_menu_should_decrease_menu_size_by_1() throws itemNotFoundException {
         restaurant =new Restaurant("Amelie's cafe","Chennai",openingTime,closingTime);
@@ -58,6 +61,7 @@ class RestaurantTest {
         restaurant.removeFromMenu("Vegetable lasagne");
         assertEquals(initialMenuSize-1,restaurant.getMenu().size());
     }
+
     @Test
     public void removing_item_that_does_not_exist_should_throw_exception() {
         restaurant =new Restaurant("Amelie's cafe","Chennai",openingTime,closingTime);
@@ -67,4 +71,49 @@ class RestaurantTest {
                 ()->restaurant.removeFromMenu("French fries"));
     }
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>Part 3: Adding a Feature using TDD<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    @Test
+    public void adding_no_items_to_order_display_total_value_as_0() throws itemNotFoundException {
+        restaurant =new Restaurant("Yash's cafe","Ahmedabad",openingTime,closingTime);
+        restaurant.addToMenu("Item1",100);
+        restaurant.addToMenu("Item2", 200);
+
+        List<String> itemNames = new ArrayList<String>();
+
+        int totalPrice = restaurant.calculateTotalPrice(itemNames);
+        assertEquals(0, totalPrice);
+    }
+
+    @Test
+    public void adding_items_to_order_display_total_value_as_their_individual_price_summation() throws itemNotFoundException {
+        restaurant =new Restaurant("Yash's cafe","Ahmedabad",openingTime,closingTime);
+        restaurant.addToMenu("Item1",100);
+        restaurant.addToMenu("Item2", 200);
+        restaurant.addToMenu("Item3", 300);
+
+        List<String> itemNames = new ArrayList<String>();
+        itemNames.add("Item1");
+        itemNames.add("Item3");
+
+        int totalPrice = restaurant.calculateTotalPrice(itemNames);
+        assertEquals(400, totalPrice);
+    }
+
+    @Test
+    public void adding_items_to_order_which_is_not_in_restaurant_menu_should_throw_an_exception() throws itemNotFoundException {
+        restaurant =new Restaurant("Yash's cafe","Ahmedabad",openingTime,closingTime);
+        restaurant.addToMenu("Item1",100);
+        restaurant.addToMenu("Item2", 200);
+        restaurant.addToMenu("Item3", 300);
+
+        List<String> itemNames = new ArrayList<String>();
+        itemNames.add("Item5");
+
+        assertThrows(itemNotFoundException.class,
+                ()->restaurant.calculateTotalPrice(itemNames));
+    }
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Part 3: Adding a Feature using TDD>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 }
