@@ -56,6 +56,7 @@ public class Restaurant {
 
         menu.remove(itemToBeRemoved);
     }
+
     public void displayDetails(){
         System.out.println("Restaurant:"+ name + "\n"
                 +"Location:"+ location + "\n"
@@ -67,6 +68,17 @@ public class Restaurant {
 
     public String getName() {
         return name;
+    }
+
+    public int calculateTotalPrice(List<String> itemNames) throws itemNotFoundException {
+        int totalPrice = 0;
+        for(String itemName: itemNames) {
+            Item selectedItem = findItemByName(itemName);
+            if(selectedItem == null)
+                throw new itemNotFoundException(itemName);
+            totalPrice = totalPrice + selectedItem.getPrice();
+        }
+        return totalPrice;
     }
 
 }
