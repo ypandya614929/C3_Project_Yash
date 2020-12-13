@@ -5,9 +5,17 @@ import java.util.List;
 public class RestaurantService {
     private static List<Restaurant> restaurants = new ArrayList<>();
 
-    public Restaurant findRestaurantByName(String restaurantName){
-        return null;
-        //DELETE ABOVE STATEMENT AND WRITE CODE HERE
+    public Restaurant findRestaurantByName(String restaurantName) throws restaurantNotFoundException {
+        List<Restaurant> restaurants = getRestaurants();
+        for (Restaurant restaurant : restaurants) {
+            // check restaurant name from list of restaurants.
+            if (restaurant.getName().equals(restaurantName)){
+                // return restaurant if found.
+                return restaurant;
+            }
+        }
+        // return exception in case of restaurant is not found.
+        throw new restaurantNotFoundException(restaurantName);
     }
 
 
